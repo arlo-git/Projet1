@@ -1,5 +1,5 @@
 # ======================== main.py ========================
-
+#allo
 import pygame
 import sys
 from config import FPS, doodle_dict
