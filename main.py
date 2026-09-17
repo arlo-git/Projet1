@@ -1,5 +1,6 @@
 # ======================== main.py ========================
 #allo
+#bonsoir
 import pygame
 import sys
 from config import FPS, doodle_dict
