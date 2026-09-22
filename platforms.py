@@ -46,7 +46,7 @@ def create_platform(x, y, platform_type="green"):
     # - une plateforme bleue se déplace à MOVING_PLATFORM_SPEED ;
     # - une plateforme à ressort est 10 pixels plus haute ;
     # - les autres plateformes sont immobiles et gardent la hauteur normale.
-    if platform_type == "vert":
+    if platform_type == "green":
          platform = {
                 "x": float(x),
                 "y": float(y),
@@ -115,7 +115,7 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     choix = random.random()
     choix_plateform = ""
     if choix <= green_probability:
-         choix_plateform = "vert"
+         choix_plateform = "green"
     elif green_probability < choix <= green_probability + blue_probability:
          choix_plateform = "blue"
     elif green_probability + blue_probability < choix <= green_probability + blue_probability + spring_probability:

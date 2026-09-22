@@ -22,6 +22,10 @@ def apply_gravity():
     # TODO : Mettez à jour la vitesse verticale puis la position verticale
     # du Doodle à partir de GRAVITY.
 
+    doodle_dict["vel_y"] += GRAVITY
+
+    doodle_dict["y"] = DOODLE_START_Y + doodle_dict["vel_y"]
+
     return
 
 # ===========================================================
@@ -35,13 +39,13 @@ def move_doodle():
     """
     keys = pygame.key.get_pressed()
 
-    # TODO : Gérez les déplacements gauche/droite et mettez à jour
+    # TODO : Gérez les déplacemsents gauche/droite et mettez à jour
     # simultanément la direction et l'image du Doodle.
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         doodle_dict["x"] -= DOODLE_SPEED
         doodle_dict["direction"] = "left"
         doodle_dict["image"] = doodle_left_img
-    elif keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
         doodle_dict["x"] += DOODLE_SPEED
         doodle_dict["direction"] = "right"
         doodle_dict["image"] = doodle_right_img
@@ -53,9 +57,9 @@ def move_doodle():
 
 
     if SCREEN_WIDTH <= doodle_dict["x"] :
-        doodle_dict["x"] = 0
+        doodle_dict["x"] = -DOODLE_WIDTH
 
-    if -DOODLE_WIDTH >= doodle_dict["x"]:
+    elif -DOODLE_WIDTH >= doodle_dict["x"]:
         doodle_dict["x"] = SCREEN_WIDTH 
     
 
@@ -108,6 +112,16 @@ def check_platform_collisions():
     # - spring : SPRING_JUMP_VELOCITY ;
     # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
     # - green/blue : JUMP_VELOCITY.
+
+    if GRAVITY > 0:
+        for plateformes in PLATFORMS:
+            if rects_collide((doodle_dict["x"],doodle_dict["y"],DOODLE_HEIGHT,DOODLE_WIDTH),
+                             (plateformes["x"],plateformes["y"],plateformes["width"],plateformes["height"])):
+                if plateformes["active"] and doodle_dict["y"] + 14 < plateformes["y"]:
+                    if plateformes["type"] == "green" or plateformes["type"] == "blue":
+                        doodle_dict["vel_y"] = JUMP_VELOCITY
+                    
+
 
     return
 
