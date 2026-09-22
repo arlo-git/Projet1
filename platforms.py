@@ -37,16 +37,6 @@ def create_platform(x, y, platform_type="green"):
     représente aussi correctement les plateformes bleues, marron et à ressort.
     """
 
-    platform = {
-        "x": float(x),
-        "y": float(y),
-        "type": "green",                    # TODO
-        "image": platform_images["green"],  # TODO
-        "vx": 0.0,                          # TODO
-        "active": True,
-        "width": PLATFORM_SIZE[0],
-        "height": PLATFORM_SIZE[1]           # TODO
-    }
 
     # TODO : Modifiez le dictionnaire ci-dessus pour qu'il dépende réellement
     # de l'argument platform_type.
@@ -56,7 +46,50 @@ def create_platform(x, y, platform_type="green"):
     # - une plateforme bleue se déplace à MOVING_PLATFORM_SPEED ;
     # - une plateforme à ressort est 10 pixels plus haute ;
     # - les autres plateformes sont immobiles et gardent la hauteur normale.
-
+    if platform_type == "vert":
+         platform = {
+                "x": float(x),
+                "y": float(y),
+                "type": "green",                    
+                "image": platform_images["green"],  
+                "vx": 0.0,                          
+                "active": True,
+                "width": PLATFORM_SIZE[0],
+                "height": PLATFORM_SIZE[1]           
+            }
+    elif platform_type == "blue":
+         platform = {
+                "x": float(x),
+                "y": float(y),
+                "type": "blue",                    
+                "image": platform_images["blue"],  
+                "vx": MOVING_PLATFORM_SPEED,                          
+                "active": True,
+                "width": PLATFORM_SIZE[0],
+                "height": PLATFORM_SIZE[1]           
+            }
+    elif platform_type == "brown":
+         platform = {
+                "x": float(x),
+                "y": float(y),
+                "type": "brown",                    
+                "image": platform_images["brown"],  
+                "vx": 0.0,                          
+                "active": True,
+                "width": PLATFORM_SIZE[0],
+                "height": PLATFORM_SIZE[1]           
+            }
+    else:
+         platform = {
+                "x": float(x),
+                "y": float(y),
+                "type": "spring",                    
+                "image": platform_images["spring"], 
+                "vx": 0.0,                          
+                "active": True,
+                "width": PLATFORM_SIZE[0],
+                "height": PLATFORM_SIZE[1] + 10         
+            }
     return platform
 
 # ===========================================================
@@ -79,7 +112,17 @@ def choose_platform_type(green_probability, blue_probability, spring_probability
     # Attention : les seuils utilisés avec random.random() doivent être
     # cumulatifs.
 
-    return "green"  # Valeur temporaire à remplacer
+    choix = random.random()
+    choix_plateform = ""
+    if choix <= green_probability:
+         choix_plateform = "vert"
+    elif green_probability < choix <= green_probability + blue_probability:
+         choix_plateform = "blue"
+    elif green_probability + blue_probability < choix <= green_probability + blue_probability + spring_probability:
+        choix_plateform = "spring"
+    else:
+         choix_plateform = "brown"
+    return choix_plateform  
 
 # ===========================================================
 
