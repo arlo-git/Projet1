@@ -48,14 +48,13 @@ def generate_initial_platforms():
     
     while current_y >= 0:  
         new_platform = create_platform(
-                random.randrange(1,SCREEN_WIDTH - PLATFORM_WIDTH) + (DOODLE_WIDTH - PLATFORM_WIDTH) // 2,
+                random.randrange(1 + PLATFORM_WIDTH ,SCREEN_WIDTH - PLATFORM_WIDTH) + (DOODLE_WIDTH - PLATFORM_WIDTH) // 2,
                 current_y,
                 choose_platform_type(0.65,0.17,0.10)
             )
         PLATFORMS.append(new_platform)
 
         current_y -=  random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
-        print(current_y)
             
     return
     # ===========================================================

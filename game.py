@@ -24,7 +24,7 @@ def apply_gravity():
 
     doodle_dict["vel_y"] += GRAVITY
 
-    doodle_dict["y"] = DOODLE_START_Y + doodle_dict["vel_y"]
+    doodle_dict["y"] += doodle_dict["vel_y"]
 
     return
 
@@ -120,6 +120,11 @@ def check_platform_collisions():
                 if plateformes["active"] and doodle_dict["y"] + 14 < plateformes["y"]:
                     if plateformes["type"] == "green" or plateformes["type"] == "blue":
                         doodle_dict["vel_y"] = JUMP_VELOCITY
+                    elif plateformes["type"] == "brown":
+                        doodle_dict["vel_y"] = JUMP_VELOCITY
+                        plateformes["active"] = False
+                    elif plateformes["type"] == "spring":
+                        doodle_dict["vel_y"] = SPRING_JUMP_VELOCITY
                     
 
 
@@ -142,6 +147,21 @@ def scroll_camera():
     # meilleur score doit être mis à jour. Les plateformes sorties sous
     # l'écran doivent être retirées, puis de nouvelles plateformes générées.
 
+    if doodle_dict["y"] < CAMERA_SCROLL_THRESHOLD:
+        distance = CAMERA_SCROLL_THRESHOLD - doodle_dict["y"]
+        doodle_dict["y"] = CAMERA_SCROLL_THRESHOLD
+        doodle_dict["score"] += distance
+
+        if doodle_dict["score"] > doodle_dict.get("high_score", 0):
+            doodle_dict["high_score"] = doodle_dict["score"]
+
+        for plateformes in PLATFORMS:
+            plateformes["y"] += distance
+            if plateformes["y"] > SCREEN_HEIGHT:
+                PLATFORMS.remove(plateformes)
+
+        generate_new_platforms()
+        
     return
 
 # ===========================================================
@@ -159,6 +179,22 @@ def generate_new_platforms():
     # Vous devrez partir de la plateforme actuellement la plus haute et
     # continuer à ajouter des plateformes tant que nécessaire. Utilisez
     # choose_platform_type(...) avec les probabilités indiquées dans le README.
+
+    if PLATFORMS == []:
+        last_platform_y = SCREEN_HEIGHT
+    else:
+        last_platform_y = SCREEN_HEIGHT
+        for plateformes in PLATFORMS:
+            if plateformes["y"] < last_platform_y:
+                last_platform_y = plateformes["y"]
+        
+    new_platform = create_platform(
+            random.randrange(1,SCREEN_WIDTH - PLATFORM_WIDTH) + (DOODLE_WIDTH - PLATFORM_WIDTH) // 2,
+            current_y,
+            choose_platform_type(0.55,0.20,0.13))
+    PLATFORMS.append(new_platform)
+
+    current_y -=  random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
 
     return
 
