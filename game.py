@@ -113,7 +113,7 @@ def check_platform_collisions():
     # - brown : JUMP_VELOCITY puis désactivation de la plateforme ;
     # - green/blue : JUMP_VELOCITY.
 
-    if GRAVITY > 0:
+    if doodle_dict["vel_y"] > 0:
         for plateformes in PLATFORMS:
             if rects_collide((doodle_dict["x"],doodle_dict["y"],DOODLE_HEIGHT,DOODLE_WIDTH),
                              (plateformes["x"],plateformes["y"],plateformes["width"],plateformes["height"])):
@@ -187,14 +187,20 @@ def generate_new_platforms():
         for plateformes in PLATFORMS:
             if plateformes["y"] < last_platform_y:
                 last_platform_y = plateformes["y"]
-        
-    new_platform = create_platform(
-            random.randrange(1,SCREEN_WIDTH - PLATFORM_WIDTH) + (DOODLE_WIDTH - PLATFORM_WIDTH) // 2,
-            current_y,
-            choose_platform_type(0.55,0.20,0.13))
-    PLATFORMS.append(new_platform)
 
-    current_y -=  random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
+
+        current_y = last_platform_y - random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
+
+        
+        while current_y >= 0:  
+            new_platform = create_platform(
+                random.randrange(1 ,SCREEN_WIDTH - PLATFORM_WIDTH),
+                current_y,
+                choose_platform_type(0.65,0.17,0.10)
+            )
+            PLATFORMS.append(new_platform)
+
+            current_y -=  random.randint(MIN_PLATFORM_GAP, MAX_PLATFORM_GAP)
 
     return
 
